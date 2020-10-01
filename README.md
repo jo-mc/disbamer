@@ -1,1 +1,56 @@
 # disbamer
+
+# - D - I - S - B - A - M - E - R -
+#
+# Display an aligned read sequence in a bam file alongside its reference sequence, showing inserts, deletes and mismatches.
+#
+# for best results pipe to less -S?
+
+# Requires: SAMTOOLS
+# the line number of the read to display in the bam file. (ie: samtools view file.bam | less -S   then use -N to see line numbers, or use grep sed etc...)
+# the first read is line 1, second read is line 2 etc..
+# Setup :
+# 1. soft link in current directory to your sam/bam file. named sam.lnk
+#	configure: > ln -s /path/to/sam/bam/file.bam sam.lnk
+# 2. soft link to the reference file associated with the sam/bam file (regions [chromosome name] must match from SAM file to Ref file.)
+#	configure: > ln -s /path/to/reference/file.fna ref.lnk
+# RUN :
+#      bash disbamer 4 | less -S
+# 4 = fourth read in bam file, on the fourth line.
+#
+#
+
+# Sample output:
+
+------ Calling samtools view for file noPOLchr6alignGRCh38.sam to display read in line : 43
+bam path: /hpcfs/groups/phoenix-hpc-rc003/joe/correction/chr6HG002/noPOLchr6alignGRCh38.sam
+ref path: /hpcfs/groups/phoenix-hpc-rc003/joe/ref/GRCh38p13/GCA_000001405.28_GRCh38.p13_genomic.fna
+
+---------R-E-A-D----B-A-M------------ (samtools sam.lnk)
+read a3cfd3c4-534b-4138-8d63-058865033f61
+flag 0
+region ML143369.1
+position 16790
+quality 0
+cigar 32S20M3D56M1I11M1D17M1I24M1I66M1D46M2D56M1D45M1I3M1D48M16S
+sequence CAATTTGTACTTCGTTCAGTTACGTATTACTTTAAATATGGTACTGAAAA ....
+
+---------l-e-n-g-t-h----------------- (cigtoRefLen.awk)
+matching reference length required : 401
+
+---------r-e-f-e-r-e-n-c-e----------- (getrefseq.awk ref.lnk)
+Please Wait! getting matching reference: ----may take some time.....
+
+---------g-e-n-o-m-i-c---v-i-e-w----- (viewread.awk)  
+>>>>> line 1: aligned seq. line 2: reference seq. line 3: insert/delete/mismatch indicator. lines 4- : position in aligned sequence.
+
+TTAAATATGGTACTGAAAAT---AAACAGAATATTTGTATGGGTACTTATCATTAATGTACGTAGCTGAAATTACACAG'A'GACCTGAAGAA-TTTTGAAGCATTGAGCT'A'AAGGTTAATTGCTGAATGATGGGA'C'C..
+ttaaatatggtactgaaaataagaaacagaatggttgtatgggtacttaTCATTAATGTACGTAGCTGAAATTACACAG+++GGCCTGAAGAATTTTTGAAGCATTGAGCT+++AAGGTTAATTGCTGAATGATGGGA+++C..
+....................---.........xx.............................................+++.x.........-.................+++........................+++...
+........0.........0.........0.........0.........0.........0.........1.........1'+'.........1.........1.........'+'1.........1.........1...'+'...
+........4.........5.........6.........7.........8.........9.........0.........1'+'.........2.........3.........'+'4.........5.........6...'+'...
+........0.........0.........0.........0.........0.........0.........0.........0'+'.........0.........0.........'+'0.........0.........0...'+'...
+ >>>>> Info:
+ = and X, just print seq base, P prints "P", N prints "N", D "-", I "'+'" (inserts are enclosed in '), soft clip not printed. 
+Soft clipping: S32 S16   Hard clipping: -.         >>> thankyou. 
+
