@@ -6,8 +6,7 @@ disbamer
 
 #### for best results pipe to less -S. or redirect to a file.
 
-##### Requires: SAMTOOLS  plus -
-##### the line number of the read to display in the bam file. 
+##### Requires: SAMTOOLS  plus - the line number of the read to display in the bam file. 
 (to obtain the line number: samtools view file.bam | less -S   then use -N to see line numbers, or use grep sed etc...)
 the first read is line 1, second read is line 2 etc..
 ##### Setup :
@@ -16,14 +15,14 @@ the first read is line 1, second read is line 2 etc..
 ###### 2. soft link to the reference file associated with the sam/bam file (regions [chromosome name] must match from SAM file to Ref file.)
 <code>	configure: > ln -s /path/to/reference/file.fna ref.lnk </code>
 #### RUN :
-#####      bash disbamer 4 | less -S
-###### 4 = fourth read in bam file, on the fourth line.
+#####  > bash disbamer 4 | less -S
+###### 4 = fourth read in bam file, on the fourth line of view output (no header).
 
 ##### Sample output:
 ```
------- Calling samtools view for file noPOLchr6alignGRCh38.sam to display read in line : 43
-bam path: /hpcfs/groups/phoenix-hpc-rc003/joe/correction/chr6HG002/noPOLchr6alignGRCh38.sam
-ref path: /hpcfs/groups/phoenix-hpc-rc003/joe/ref/GRCh38p13/GCA_000001405.28_GRCh38.p13_genomic.fna
+------ Calling samtools view for file chr6alignGRCh38.sam to display read in line : 43
+bam path: /hpcfs/chr6HG002/chr6alignGRCh38.sam
+ref path: /hpcfs/ref/GRCh38p13/GCA_000001405.28_GRCh38.p13_genomic.fna
 
 ---------R-E-A-D----B-A-M------------ (samtools sam.lnk)
 read a3cfd3c4-534b-4138-8d63-058865033f61
@@ -51,6 +50,6 @@ Please Wait! getting matching reference: ----may take some time.....
 ........0.........0.........0.........0.........0.........0.........0.........0'+'.........0.........0.........'+'0.........0.........0...'+'...
  * Info:
  = and X, just print seq base, P prints "P", N prints "N", D "-", I "'+'" (inserts are enclosed in '), soft clip not printed. 
-Soft clipping: S32 S16   Hard clipping: -.         >>> thankyou. 
+Soft clipping: S32 S16 ,  Hard clipping: -, total clip: 48.  Read Length (less clipping): 396  Reference Length: 403    Miss matches : 4.             >>> thankyou. 
 
 ```
