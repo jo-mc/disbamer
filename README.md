@@ -1,4 +1,4 @@
-disbamer - bash and awk show alignment of a read to reference in a terminal session.
+disbamer - using bash and awk scripts to show the alignment of a read to reference, in a terminal session.
 
 ### - D - I - S - B - A - M - E - R -
 
