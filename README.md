@@ -1,4 +1,4 @@
-disbamer
+disbamer - bash and awk show alignment of a read to reference in a terminal session.
 
 ### - D - I - S - B - A - M - E - R -
 
@@ -12,7 +12,7 @@ the first read is line 1, second read is line 2 etc..
 ##### Setup :
 ###### 1. soft link in current directory to your sam/bam file. named sam.lnk
 <code>	configure: > ln -s /path/to/sam/bam/file.bam sam.lnk </code>
-###### 2. soft link to the reference file associated with the sam/bam file (regions [chromosome name] must match from SAM file to Ref file.)
+###### 2. soft link to the reference file associated with the sam/bam file, named ref.lnk (regions [chromosome name] must match from SAM file to Ref file.)
 <code>	configure: > ln -s /path/to/reference/file.fna ref.lnk </code>
 #### RUN :
 #####  > bash disbamer 4 | less -S
