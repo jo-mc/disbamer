@@ -154,16 +154,16 @@ refMis = ""
 mismatchCount = 0
  while ( j <= (length(read_seq)) ) {
 	switch ( substr(read_seq,j,1) ) {
-	case "'" :      refAd = refAd "+"
-                        refMis = refMis "+"
+	case "'" :      refAd = refAd "'"
+                        refMis = refMis "'"
 			j = j + 1
 			while ( substr(read_seq,j,1) != "'" ) { 
 		        	refAd = refAd "+"
 			        refMis = refMis "+"
 				j = j + 1
 			}
-			refAd = refAd "+"
-                        refMis = refMis "+"
+			refAd = refAd "'"
+                        refMis = refMis "'"
                         j = j + 1
 			break
 	case "-" : 	refAd = refAd (substr(refA,k,1))
@@ -187,7 +187,7 @@ mismatchCount = 0
 
 # output:
 
-print "Legend:  line 1: aligned seq. line 2: reference seq. line 3: insert/delete/mismatch indicator. lines 4- : position in aligned sequence."
+print "Legend:  line 1: aligned seq. line 2: reference seq. line 3: insert +/delete -/mismatch x/: indicators. lines 4- : position in aligned sequence."
 print " "
 printf("1 %s \n",read_seq);
 printf("2 %s \n",refAd);
