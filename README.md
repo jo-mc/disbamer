@@ -15,8 +15,8 @@ the first read is line 1, second read is line 2 etc..
 ###### 2. soft link to the reference file associated with the sam/bam file, named ref.lnk (regions [chromosome name] must match from SAM file to Ref file.)
 <code>	configure: > ln -s /path/to/reference/file.fna ref.lnk </code>
 #### RUN :
-#####  > bash disbamer 4 | less -S
-###### 4 = fourth read in bam file, on the fourth line of view output (no header).
+#####  > bash disbamer.sh 4 | less -S
+###### 4 = fourth read in bam file, on the fourth line of view output (no header) and pipe to less (-S no line wrap)
 
 ##### Sample output:
 ```
