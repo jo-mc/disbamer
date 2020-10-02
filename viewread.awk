@@ -32,6 +32,9 @@ softClip = ""
 hardClip = ""
 totalClip = 0
 startsoftclip = 1
+inserts = 0
+deletes = 0
+matches = 0
 # posStr calculates the read position, will write read position vertically underneath the sequence.
 posStr = ""
 posStr10 = ""
@@ -53,6 +56,7 @@ for ( i=1; i<n; i++ ) {
 	case "M" : read_seq = read_seq substr(seq,pos,len)
 			pos = pos + len
 			addPos = 1
+			matches = matches + len
 			break;
         case "=" : read_seq = read_seq substr(seq,pos,len)
                         pos = pos + len
@@ -64,10 +68,12 @@ for ( i=1; i<n; i++ ) {
                         break;
 	case "D" : for(c=0;c<len;c++) read_seq = read_seq "-"
                         addPos = 1
+			deletes = deletes + len
 			break;
         case "I" : read_seq = read_seq "'" substr(seq,pos,len) "'"
                         pos = pos + len
 			addIns = 1
+			inserts = inserts + len
                         break;
         case "N" : for(c=0;c<len;c++) read_seq = read_seq "N"
                         pos = pos + len
@@ -216,9 +222,10 @@ printf("  %s \n",posStr);
 
 
 print "Info:"
-printf(" = and X, just print seq base, P prints \"P\", N prints \"N\", D \"-\", I \"'+'\" (inserts are enclosed in '), soft clip not printed. \n") 
+printf(" = and X, just print seq base, P prints \"P\", N prints \"N\", D \"-\", I \"'+'\" (inserts are enclosed in '), clipping not printed. \n") 
 if ( hardClip == "") { hardClip = "-" }
-printf("Soft clipping: %s,  Hard clipping: %s, total clip: %s.  Read Length (less clipping): %s  Reference Length: %s    Miss matches : %s.             >>> thankyou. \n",softClip,hardClip,totalClip,(length(seq)-totalClip),length(ref),mismatchCount)
+printf("Inserts: %s, Deletes: %s, Matches: %s. (using M-I-D cigars only)\n",inserts,deletes,matches)
+printf("Soft clipping: %s,  Hard clipping: %s, total clip: %s.  \nRead Length (less clipping): %s  Reference Length: %s    Miss matches : %s.             >>> thankyou. \n",softClip,hardClip,totalClip,(length(seq)-totalClip),length(ref),mismatchCount)
 print " "
 
 }
