@@ -195,17 +195,22 @@ printf("3 %s \n",refMis);
 
 # printf(" %s \n",refA);
 
-n=split(posStr1000000,carr,"[[1-9]]")
+n=split(posStr1000000,carr,"[1-9]")
 if ( n > 1 ) { printf("  %s \n",posStr1000000); }
-n=split(posStr100000,carr,"[[1-9]]")
+n=split(posStr100000,carr,"[1-9]")
+
 if ( n > 1 ) { printf("  %s \n",posStr100000); }
-n=split(posStr10000,carr,"[[1-9]]")
+n=split(posStr10000,carr,"[1-9]")
+
 if ( n > 1 ) { printf("  %s \n",posStr10000); }
-n=split(posStr1000,carr,"[[1-9]]")
+n=split(posStr1000,carr,"[1-9]")
+
 if ( n > 1 ) { printf("  %s \n",posStr1000); }
 n=split(posStr100,carr,"[1-9]")
+
 if ( n > 1 ) { printf("  %s \n",posStr100); }
 n=split(posStr10,carr,"[1-9]")
+
 if ( n > 1 ) { printf("  %s \n",posStr10); }
 printf("  %s \n",posStr);
 
