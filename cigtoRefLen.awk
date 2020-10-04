@@ -10,10 +10,10 @@
 #				read seqlengthRef <<< $(awk -v cigA="$cigarD" -f CigtoRefLen.awk)  
 
 BEGIN {
-# print "you passed me : " cigA
+# printf("\nyou passed me : %s\n",cigA)
 
 regex =  "[[:upper:]]+";
-n=split(cigA, arr, regex);   # arr will be array of numbers from CIGAR [72,12,1,37,1...]
+n=split(cigA, arr, regex);   # arr will be array of numbers from CIGAR [72,12,1,37,1...]   # hmm need to check this? samtools should do some checking of sam file integrity? 
 regex =  "[[:digit:]]+";
 m=split(cigA, brr, regex);   # brr will be array of letters form CIGAR ["",S,M,D,M...]  will have empty letter in first position, from split function.
 rlen=0
@@ -21,7 +21,7 @@ addPos=0   # flag to add current cigar value to length
 
 for ( i=1; i<n; i++ ) {
          # print arr[i] ":" brr[i+1]
-        len = arr[i]
+        len = arr[i]   
 
         switch( brr[i+1] ) {
 
@@ -55,5 +55,10 @@ if ( addPos == 1 ) {
 }  # for loop
 
 #print "reference length required (not including initial softclip) : " rlen
-print rlen
+if ( rlen == 0 ) {
+	print "*"
+} else {
+ print rlen
+}
+
 }

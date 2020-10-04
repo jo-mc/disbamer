@@ -71,10 +71,25 @@ fi
 read seqlengthD <<< $(awk -v cigA="$cigarD" -f cigtoRefLen.awk)
 echo ---------l-e-n-g-t-h----------------- "(cigtoRefLen.awk)"
 echo matching reference length required : "$seqlengthD"
+if [ "$seqlengthD" == "*" ]
+then
+  echo "CIGAR STRING error, 0 length sequence."
+  echo " check data,  exiting......"
+  echo -------------------------------------
+  exit 1
+fi
 
 echo ---------r-e-f-e-r-e-n-c-e----------- "(getrefseq.awk ref.lnk)"
 echo Please Wait! getting matching reference:  "----may take some time....."
 read seqrefD <<< $(awk -v regA="$regionD" -v posA="$positionD" -v lenA="$seqlengthD" -f getrefseq.awk ref.lnk)
+if [ "$seqrefD" == "" ]
+then
+  echo "REFERENCE NOT FOUND. ."
+  echo " please check data and reference link,  exiting......"
+  echo -------------------------------------
+  exit 1
+fi
+
 echo
 echo ---------g-e-n-o-m-i-c---v-i-e-w----- "(viewread.awk)"
 awk -v cigA="$cigarD" -v seqA="$seqD" -v refA="$seqrefD" -f viewread.awk

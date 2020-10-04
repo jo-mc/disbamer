@@ -82,13 +82,13 @@ switch (stage) {
 END {
 switch (stage) {
 case "1" :
-	printf("\n XXXX Could not find region: %s in lnkref, link to your reference. \n",$1)   > "/dev/stderr"
+	printf("\n XXXX Could not find region: %s in lnk.ref, link to your reference. \n",$1)   > "/dev/stderr"
 	break;
 case "2" :
-        printf("\n XXXX Could not find start postion: %s in region %s for lnkref, link to your reference. \n",position, $1)   > "/dev/stderr"
+        printf("\n XXXX Could not find start postion: %s in region %s for lnk.ref, link to your reference. \n",position, $1)   > "/dev/stderr"
         break;
 case "3" :
-        printf("\n XXXX Could not find end position: %s in region %s for lnkref, link to your reference. \n",to_pos,$1)   > "/dev/stderr"
+        printf("\n XXXX Could not find end position: %s in region %s for lnk.ref, link to your reference. \n",to_pos,$1)   > "/dev/stderr"
         break;
 case "4" : # OK
        #  printf("\n Found region and position in reference. \n",$1)   > "/dev/stderr"
