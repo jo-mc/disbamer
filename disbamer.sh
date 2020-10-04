@@ -61,7 +61,7 @@ echo sequence ${seqD:1:50} "...."   # substring
 # echo "check_"$seqD"_check"
 if [ "$seqD" == "*" ]
 then
-  echo "No sequence data present, supplementary or secondary alignments in bam do not show bases."
+  echo "No sequence data present, secondary alignments in bam do not show bases."
   echo " check data,  exiting......"
   echo -------------------------------------
   exit 1
