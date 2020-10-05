@@ -54,4 +54,4 @@ Legend:  line 1: aligned seq. line 2: reference seq. line 3: insert +/delete -/m
 Soft clipping: S32 S16 ,  Hard clipping: -, total clip: 48.  Read Length (less clipping): 396  Reference Length: 403    Miss matches : 4.             >>> thankyou. 
 
 ```
-Design: see [disbamer_code_diagrams.pdf](./disbamer_code_diagrams.pdf)
+Design: see [disbamer_code_diagrams.pdf](./disbamer_code_diagrams.pdf) 
