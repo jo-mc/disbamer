@@ -1,0 +1,29 @@
+The cs optional tag
+The cs SAM/PAF tag encodes bases at mismatches and INDELs. It matches regular expression /(:[0-9]+|\*[a-z][a-z]|[=\+\-][A-Za-z]+)+/. Like CIGAR, cs consists of series of operations. Each leading character specifies the operation; the following sequence is the one involved in the operation.
+
+The cs tag is enabled by command line option --cs. The following alignment, for example:
+
+CGATCGATAAATAGAGTAG---GAATAGCA
+||||||   ||||||||||   |||| |||
+CGATCG---AATAGAGTAGGTCGAATtGCA
+is represented as:
+6-ata:10+gtc:4*at:3
+
+where :[0-9]+ represents an identical block, -ata represents a deletion, +gtc an insertion and *at indicates reference base a is substituted with a query base t. It is similar to the MD SAM tag but is standalone and easier to parse.
+
+If --cs=long is used, the cs string also contains identical sequences in the alignment. 
+The above example will become:
+  =CGATCG-ata=AATAGAGTAG+gtc=GAAT*at=GCA 
+The long form of cs encodes both reference and query sequences in one string. The cs tag also encodes intron positions and splicing signals (see the minimap2 manpage for details).
+
+https://github.com/lh3/minimap2#the-cs-optional-tag
+
+Usage: minimap2 [options] <target.fa>|<target.idx> [query.fa] [...]
+Options:
+Indexing:
+:
+Mapping:
+:
+Alignment:
+:  Input/Output:
+    --cs[=STR]   output the cs tag; STR is 'short' (if absent) or 'long' [none]
