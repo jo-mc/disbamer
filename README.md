@@ -51,7 +51,72 @@ Legend:  line 1: aligned seq. line 2: reference seq. line 3: insert +/delete -/m
   ........0.........0.........0.........0.........0.........0.........0.........0'+'.........0.........0.........'+'0.........0.........0...'+'......0......
  * Info:
  = and X, just print seq base, P prints "P", N prints "N", D "-", I "'+'" (inserts are enclosed in '), soft clip not printed. 
-Soft clipping: S32 S16 ,  Hard clipping: -, total clip: 48.  Read Length (less clipping): 396  Reference Length: 403    Miss matches : 4.             >>> thankyou. 
+Soft clipping: S32 S16 ,  Hard clipping: -, total clip: 48.  Read Length (less clipping): 396  Reference Length: 403    Miss matches : 4.             >>> disbamer. 
 
 ```
 Design: see [disbamer_code_diagrams.pdf](./disbamer_code_diagrams.pdf) 
+
+_____________________________________________________________________________________________________________________________________________________________
+
+#### Other tools comparision: 1. disbamer, 2. nucleotide BLAST, 3. samtools tview
+
+##### disbamer for read 28 of aligned nanopore reads (truncated, full read 12,406 nucleotides is in output.), command: ```bash disbamer.sh 28 | less -S```
+```
+---------R-E-A-D----B-A-M------------ (samtools sam.lnk)
+read f45d2fa2-3947-4fc6-a6d7-93c115c88420
+flag 0
+region CM000668.2
+position 67414
+quality 1
+cigar    |- 2997 -| :  31S7M1D14M1I4M2I10M1D26M1I20M1I10M1I31M2I8M1I15M1I .... I3M1I34M1D46M2D17M3S.
+sequence |- 12406 -| :  ATACGAATAAGAGTGTGGGCGATAACCTAAATAAGATATATCTGAATATA ....  AACTACAATGCAGATGATGC.
+---------g-e-n-o-m-i-c---v-i-e-w----- (xviewread.awk) note 'x' test
+Legend:  line 1: aligned seq. line 2: reference seq. line 3: insert +/delete -/mismatch x/: indicators. lines 0/4- : positio
+
+           |150      |160,,,,,,,      |170      |180      |190      |200,,,      |210      |220,,,      |230,,,      |240
+1 AGTATAT-TTTTATAAATGTTT'A'AAAT'AA'AAGCATACTT-AAATGGCAAAAACATAATACATATAT'A'AATTTTCTTATGGCAGGAGG'A'AGGAAACAGG'A'GCAAGGCACAGGG
+2 agtatatattttataaatgttt'+'aaat'++'aagcatacttaaaatggcaaaaacataatacatatat'+'aattttcttatggCAGGAGG'+'AGGAAACAGG'+'GCAAGGCACAGGG
+3 .......-..............'+'....'++'..........-..........................'+'....................'+'..........'+'.............
+           |150      |160,,,,,,,      |170      |180      |190      |200,,,      |210      |220,,,      |230,,,      |240
+Info:
+ = and X, just print seq base, P prints "P", N prints "N", D "-", I "'+'" (inserts are enclosed in '), clipping not printed.
+Inserts: 439, Deletes: 567, Matches: 11833, Miss matches : 431. (Note: matches using M-I-D cigars only)
+```
+##### Nucleotide BLAST will display submitted sequence (or part of) aligned to reference (```https://blast.ncbi.nlm.nih.gov/Blast.cgi```):
+```Submitted sequence:  AAATAAAAGCATACTTAAATGGCAAAAACATAATACATATATAAATTTTCTTATGGCAGGAGGAAGGAAACAGGAGCAAGGCACAGGG
+database: Nucleotide collection (nr/nt)
+organism: human (taxid:9606)
+```
+```
+Human DNA sequence from clone RP1-24O22 on chromosome 6, complete sequence
+Sequence ID: AL353654.29Length: 86701Number of Matches: 1
+Related Information
+Genome Data Viewer-aligned genomic context
+Range 1: 7440 to 7519 GenBank Graphics
+Alignment statistics for match #1
+Score	Expect	Identities	Gaps	Strand
+118 bits(130)	1e-24	79/83(95%)	4/83(4%)	Plus/Plus
+Query  7     AAGCATACTTAAA-TGGCAAAAACATAATACATATATAAATTTTCTTATGGCAGGAGGAA  65
+             ||||||||||||| ||||||||||||||||||||||| |||||||||||||||||||| |
+Sbjct  7440  AAGCATACTTAAAATGGCAAAAACATAATACATATAT-AATTTTCTTATGGCAGGAGG-A  7497
+
+Query  66    GGAAACAGGAGCAAGGCACAGGG  88
+             ||||||||| |||||||||||||
+Sbjct  7498  GGAAACAGG-GCAAGGCACAGGG  7519
+```
+##### samtools tview (shows multiple reads aligning to reference)
+command: ```samtools tview -d T -p CM000668.2:67414  /hpcfs/groups/phoenix-hpc-rc003/joe/correction/chm13/chr6nanop.bam ref.lnk ```
+```
+           67421        67431                67441             67451
+ag***ta*tatattttat*aa**atg**ttt***a***aa*t**aag*c***a*tact**t*aaa**atggc*a*aaaac
+..   .. .......... ..  ...  ...   .   .. .  ... .   . ....  . ...  ..... . .....
+=C***C======S=====*==**.C=**===***=***=W*=**===*=***=*=CA=**=*===**=C==.*=*===.A
+==***=.*C======.==*==**===**MC=***=***==*=**=G=*=***=*====**R*.======.==*=*====A
+==***C=*===.A=====*=W==.==**==C***.***==*=**===*R***=*====**=*=.C**=====*=*M====
+w=***m,*bk=,======*==**r=m**kbk***=***,=*=**===*=***=*=n=g**r*bk=**,====***====h
+=======*==========*==**===**===***=***==*=**===*=***=*====*****==**=====***=====
+=,***==*==ac======*k=**===**===***,***,=*=**===*=***=*==g=**=**==**,c===*=*==h==
+==***==*==v=abbk=a*==**===**===***v***=c*g**bk=*a***=*====**=**==**h=cab*k*=,===
+==***==*=============**===**===*******==*=**=***=***=*====**=*===**==*==*=*=====
+==***==*==========*==**===**===***=***==*=**=***=***=*====**=**==**=====*=*=====
+```
