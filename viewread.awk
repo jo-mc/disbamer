@@ -61,6 +61,7 @@ for ( i=1; i<n; i++ ) {
         case "=" : read_seq = read_seq substr(seq,pos,len)
                         pos = pos + len
                         addPos = 1
+			matches = matches + len
                         break;
         case "X" : read_seq = read_seq substr(seq,pos,len)
                         pos = pos + len
@@ -224,8 +225,8 @@ printf("  %s \n",posStr);
 print "Info:"
 printf(" = and X, just print seq base, P prints \"P\", N prints \"N\", D \"-\", I \"'+'\" (inserts are enclosed in '), clipping not printed. \n") 
 if ( hardClip == "") { hardClip = "-" }
-printf("Inserts: %s, Deletes: %s, Matches: %s. (using M-I-D cigars only)\n",inserts,deletes,matches)
-printf("Soft clipping: %s,  Hard clipping: %s, total clip: %s.  \nRead Length (less clipping): %s  Reference Length: %s    Miss matches : %s.             >>> thankyou. \n",softClip,hardClip,totalClip,(length(seq)-totalClip),length(ref),mismatchCount)
+printf("Inserts: %s, Deletes: %s, Matches: %s. (using M-I-D cigars only), Miss matches : %s.\n",inserts,deletes,matches,mismatchCount)
+printf("Soft clipping: %s,  Hard clipping: %s, total clip: %s.  \nRead Length (less clipping): %s  Reference Length: %s.             >>> thankyou. \n",softClip,hardClip,totalClip,(length(seq)-totalClip),length(ref))
 print " "
 
 }
