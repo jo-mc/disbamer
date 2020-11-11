@@ -1,13 +1,19 @@
 #!/bin/sh
 
-if [ -t 1 ] ; then nopipe_out=terminal;  fi;  # if output is not redirected exit... need a message! how to goto stdout? use cat? or xargs?
-
 
 # - D - I - S - B - A - M - E - R - 
 #
 # Display an aligned read sequence in a bam file alongside its reference sequence, showing inserts, deletes and mismatches.
 #
-# for best results pipe to less -S?
+# for best results pipe to less -S, if not will wrap sequence output 80 bp per line.
+
+
+if [ -t 1 ] ; then nopipe_out=terminal;  fi;  # if output is not piped
+# nopipe_out will be set to terminal if the script output is not being sent to a pipe.
+# This means the output will go to the terminal and I need to be aware of line wrapping wrapping. (handled in viewread.awk)
+# if flag '-t' = 1 then output is going to terminal:
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html
+
 
 # Requires: SAMTOOLS 
 # the line number of the read to display in the bam file. (ie: samtools view file.bam | less -S   then use -N to see line numbers, or use grep sed etc...)
@@ -101,5 +107,5 @@ fi
 
 echo
 echo ---------g-e-n-o-m-i-c---v-i-e-w----- "(xviewread.awk) note 'x' test"
-awk -v cigA="$cigarD" -v seqA="$seqD" -v refA="$seqrefD" -v outview="$nopipe_out" -f xviewread.awk
+awk -v cigA="$cigarD" -v seqA="$seqD" -v refA="$seqrefD" -v outview="$nopipe_out" -f viewread.awk
 

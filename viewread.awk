@@ -1,9 +1,10 @@
+
 #! /usr/bin/awk -f 
 
 # Given a read sequence, cigar string and reference sequences, print out the alignment.
 #
 #  usage from a bash script >   # assign read sequence, cigar string and reference sequences, to awk variables from a bash script, and call awk script:
-#                               awk -v cigA="$cigarD" -v seqA="$seqD" -v refA="$seqrefD" -f viewread.awk
+#                               awk -v cigA="$cigarD" -v seqA="$seqD" -v refA="$seqrefD" outview="$nopipe_out" -f viewread.awk
                                         # call the awk script passing the bash variables as above
 # Displays The read sequence with '-' for deletes 'N' quoted base(s) for insert(s); then the reference sequence on the next line, followed by the read position on subsequenct lines.
 # Pipe display to less -S to allow scrolling horizontally.. 
@@ -46,6 +47,9 @@ posStr1000000 = ""
 rlen = 1
 addPos = 0
 addIns = 0
+
+kStr = ""
+kspace = " "  # space to align read position to first multiple of 10 after any clip
 
 for ( i=1; i<n; i++ ) {
 	# print arr[i] ":" brr[i+1]
@@ -102,28 +106,23 @@ for ( i=1; i<n; i++ ) {
 
 
 #  printf("len %s\n",len)
+
 if ( addPos == 1 ) {
  for ( j=rlen; j<(rlen+len); j++ ) {
 	if ( j % 10 != 0 ) {
-		posStr = posStr "."
-		posStr10 = posStr10 "."
-		posStr100 = posStr100 "."
-		posStr1000 = posStr1000 "."
-		posStr10000 = posStr10000 "."
-		posStr100000 = posStr100000 "."
-                posStr1000000 = posStr1000000 "."
+		kspace = kspace " "
 	}
         if ( j % 10 == 0 ) {
 #		k = int(j/10)
 		k = sprintf("%06i",j)  # format K with leading zeroes
 #		print k
-		posStr = posStr substr(k,length(k),1)
-                posStr10 = posStr10 substr(k,length(k)-1,1)
-                posStr100 = posStr100 substr(k,length(k)-2,1)
-                posStr1000 = posStr1000 substr(k,length(k)-3,1)
-                posStr10000 = posStr10000 substr(k,length(k)-4,1)
-                posStr100000 = posStr100000 substr(k,length(k)-5,1)
-                posStr1000000 = posStr1000000 substr(k,length(k)-6,1)
+		if ( kStr == "" ) {
+		   kStr = kspace
+		} else {
+		   kStr = kStr "|" j kxspace substr(kspace,1,(9-length(j)))
+		   kspace = ""
+		   kxspace = ""
+		}
 	}
  }
  rlen = rlen + len
@@ -132,19 +131,13 @@ if ( addPos == 1 ) {
 
 # mark inserts
 if ( addIns == 1 ) {
- posStr = posStr "'"; ; posStr10 = posStr10 "'";  posStr100 = posStr100 "'"; posStr1000 = posStr1000 "'"; posStr10000 = posStr10000 "'";  posStr100000 = posStr100000 "'";  posStr1000000 = posStr1000000 "'";
+ kxspace = kxspace ","
  for ( j=rlen; j<(rlen+len); j++ ) {
 {
-                posStr = posStr "+"
-                posStr10 = posStr10 "+"
-                posStr100 = posStr100 "+"
-                posStr1000 = posStr1000 "+"
-                posStr10000 = posStr10000 "+"
-                posStr100000 = posStr100000 "+"
-                posStr1000000 = posStr1000000 "+"
+	 kxspace = kxspace ","
         }
  }
- posStr = posStr "'"; posStr10 = posStr10 "'";  posStr100 = posStr100 "'"; posStr1000 = posStr1000 "'"; posStr10000 = posStr10000 "'";  posStr100000 = posStr100000 "'";  posStr1000000 = posStr1000000 "'";  
+ kxspace = kxspace "," 
  addIns = 0
 }
 
@@ -194,39 +187,39 @@ mismatchCount = 0
 
 # output:
 
-print "Legend:  line 1: aligned seq. line 2: reference seq. line 3: insert +/delete -/mismatch x/: indicators. lines 4- : position in aligned sequence."
-print " "
-printf("1 %s \n",read_seq);
-printf("2 %s \n",refAd);
-printf("3 %s \n",refMis);
+if ( outview == "terminal" ) {    # terminal is set if output is not being piped. Print sequence, Ref and indicators 80 base pairs/line. 
+	j = 1
+	k = length(read_seq)
+	print "Legend:  line 1: aligned seq. line 2: reference seq. line 3: insert +/delete -/mismatch x/: indicators. lines 0 : position in aligned sequence."
+	print " "
+	while ( k > j ) {
+	        printf(" %s \n",substr(kStr,j,80));
+	        printf("1 %s \n",substr(read_seq,j,80));
+	        printf("2 %s \n",substr(refAd,j,80));
+	        printf("3 %s \n",substr(refMis,j,80));
+#	        printf(" %s \n",substr(kStr,j,80));
+		printf("\n")
+		j = j + 80
+	}
+} else {  # piped output will print read on one line.
+	print "Legend:  line 1: aligned seq. line 2: reference seq. line 3: insert +/delete -/mismatch x/: indicators. lines 0/4- : position in aligned sequence."
+	print " "
+	printf(" %s \n",kStr);
+	printf("1 %s \n",read_seq);
+	printf("2 %s \n",refAd);
+	printf("3 %s \n",refMis);
+	printf(" %s \n",kStr);
+}
 
 # printf(" %s \n",refA);
 
-n=split(posStr1000000,carr,"[1-9]")
-if ( n > 1 ) { printf("  %s \n",posStr1000000); }
-n=split(posStr100000,carr,"[1-9]")
-
-if ( n > 1 ) { printf("  %s \n",posStr100000); }
-n=split(posStr10000,carr,"[1-9]")
-
-if ( n > 1 ) { printf("  %s \n",posStr10000); }
-n=split(posStr1000,carr,"[1-9]")
-
-if ( n > 1 ) { printf("  %s \n",posStr1000); }
-n=split(posStr100,carr,"[1-9]")
-
-if ( n > 1 ) { printf("  %s \n",posStr100); }
-n=split(posStr10,carr,"[1-9]")
-
-if ( n > 1 ) { printf("  %s \n",posStr10); }
-printf("  %s \n",posStr);
 
 
 print "Info:"
 printf(" = and X, just print seq base, P prints \"P\", N prints \"N\", D \"-\", I \"'+'\" (inserts are enclosed in '), clipping not printed. \n") 
 if ( hardClip == "") { hardClip = "-" }
-printf("Inserts: %s, Deletes: %s, Matches: %s. (using M-I-D cigars only), Miss matches : %s.\n",inserts,deletes,matches,mismatchCount)
-printf("Soft clipping: %s,  Hard clipping: %s, total clip: %s.  \nRead Length (less clipping): %s  Reference Length: %s.             >>> thankyou. \n",softClip,hardClip,totalClip,(length(seq)-totalClip),length(ref))
+printf("Inserts: %s, Deletes: %s, Matches: %s, Miss matches : %s. (Note: matches using M-I-D cigars only)\n",inserts,deletes,matches,mismatchCount)
+printf("Soft clipping: %s,  Hard clipping: %s, total clip: %s.  \nRead Length (less clipping): %s  Reference Length: %s.             >>> disbamer <<< \n",softClip,hardClip,totalClip,(length(seq)-totalClip),length(ref))
 print " "
 
 }
