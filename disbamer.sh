@@ -70,9 +70,9 @@ echo quality "$qualityD"
 
 read -r cigarD <<< "$(echo "$bamdata" | awk '{print $6}')"
 ciglen="${#cigarD}"
-echo cigar "   |- ${ciglen} -| : " "${cigarD:1:50}" "...." "${cigarD:$(($ciglen-20)):20}."   # cigar
+echo cigar "   |- ${ciglen} -| : " "${cigarD:0:50}" "...." "${cigarD:$(($ciglen-20)):20}."   # cigar
 read -r seqD <<< "$(echo "$bamdata" | awk '{print $10}')"
-echo sequence "|- ${#seqD} -| : " "${seqD:1:50}" ".... " "${seqD:$((${#seqD}-20)):20}."  # ${::} substring ${#} length of string var
+echo sequence "|- ${#seqD} -| : " "${seqD:0:50}" ".... " "${seqD:$((${#seqD}-20)):20}."  # ${::} substring ${#} length of string var
 # echo "check_"$seqD"_check"
 if [ "$seqD" == "*" ]
 then
