@@ -16,8 +16,8 @@ the first read is line 1, second read is line 2 etc..
 <code>	configure: > ln -s /path/to/reference/file.fna ref.lnk </code>
 ###### note: Links, sam.lnk & ref.lnk, in repository point to sample sam and reference files, READS 1, 2, and 3 are provided for demonstration purposes.
 #### RUN :
-#####  > bash disbamer.sh 2 | less -S
-###### 2 = fourth read in bam file, on the fourth line of view output (no header) and pipe to less (-S no line wrap)
+#####  > bash disbamer.sh 3 | less -S
+###### 3 = third read in bam file, on third line if using samtools view (no header) and pipe to less (-S no line wrap)
 
 ##### Sample output:
 ```
