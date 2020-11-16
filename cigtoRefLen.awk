@@ -12,7 +12,7 @@
 BEGIN {
 # printf("\nyou passed me : %s\n",cigA)
 
-regex =  "[[:upper:]]+";
+regex =  "[[:upper:]=]+";
 n=split(cigA, arr, regex);   # arr will be array of numbers from CIGAR [72,12,1,37,1...]   # hmm need to check this? samtools should do some checking of sam file integrity? 
 regex =  "[[:digit:]]+";
 m=split(cigA, brr, regex);   # brr will be array of letters form CIGAR ["",S,M,D,M...]  will have empty letter in first position, from split function.
