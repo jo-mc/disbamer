@@ -23,7 +23,7 @@ ref = refA
 # print " Seq ref: ",  substr(refA,1,50), "...."
 
 # initialise data
-regex =  "[[:upper:]]+"; 
+regex =  "[[:upper:]=]+";   # '=' as it is a cigar term
 n=split(cig, arr, regex);
 regex =  "[[:digit:]]+";
 m=split(cig, brr, regex);
@@ -36,14 +36,6 @@ startsoftclip = 1
 inserts = 0
 deletes = 0
 matches = 0
-# posStr calculates the read position, will write read position vertically underneath the sequence.
-posStr = ""
-posStr10 = ""
-posStr100 = ""
-posStr1000 = ""
-posStr10000 = ""
-posStr100000 = ""
-posStr1000000 = ""
 rlen = 1
 addPos = 0
 addIns = 0
@@ -52,7 +44,7 @@ kStr = ""
 kspace = " "  # space to align read position to first multiple of 10 after any clip
 
 for ( i=1; i<n; i++ ) {
-	# print arr[i] ":" brr[i+1]
+#	 print arr[i] "--------" brr[i+1]
 	len = arr[i]
 
 	switch( brr[i+1] ) {
@@ -61,31 +53,31 @@ for ( i=1; i<n; i++ ) {
 			pos = pos + len
 			addPos = 1
 			matches = matches + len
-			break;
+			break
         case "=" : read_seq = read_seq substr(seq,pos,len)
                         pos = pos + len
                         addPos = 1
 			matches = matches + len
-                        break;
+                        break
         case "X" : read_seq = read_seq substr(seq,pos,len)
                         pos = pos + len
                         addPos = 1
-                        break;
+                        break
 	case "D" : for(c=0;c<len;c++) read_seq = read_seq "-"
                         addPos = 1
 			deletes = deletes + len
-			break;
+			break
         case "I" : read_seq = read_seq "'" substr(seq,pos,len) "'"
                         pos = pos + len
 			addIns = 1
 			inserts = inserts + len
-                        break;
+                        break
         case "N" : for(c=0;c<len;c++) read_seq = read_seq "N"
                         pos = pos + len
-                        break;
+                        break
         case "P" : for(c=0;c<len;c++) read_seq = read_seq "P"
                         pos = pos + len
-                        break;
+                        break
         case "S" : softClip = softClip "S" len " "
 			if ( pos == 1 ) {
 				startsoftclip = len
@@ -93,14 +85,14 @@ for ( i=1; i<n; i++ ) {
 			}
                         pos = pos + len
 			totalClip = totalClip + len
-                        break;
+                        break
         case "H" : hardClip = hardClip "H" len " "
                         # pos does not alter for hard clip 
 			totalClip = totalClip +	len
-                        break;
+                        break
 
 	default:
-		break;
+		break
 
 	}
 
@@ -142,7 +134,6 @@ if ( addIns == 1 ) {
 }
 
 # printf("%s \n",read_seq);    # see output grow for each cigar 
-# printf("%s \n",posStr);
 
 }  # for each cigar
 
@@ -192,6 +183,7 @@ if ( outview == "terminal" ) {    # terminal is set if output is not being piped
 	k = length(read_seq)
 	print "Legend:  line 1: aligned seq. line 2: reference seq. line 3: insert +/delete -/mismatch x/: indicators. lines 0 : position in aligned sequence."
 	print " "
+        printf("CIGAR (320max): %s \n",substr(cig,0,320));   # OK?
 	while ( k > j ) {
 	        printf(" %s \n",substr(kStr,j,80));
 	        printf("1 %s \n",substr(read_seq,j,80));
@@ -204,6 +196,7 @@ if ( outview == "terminal" ) {    # terminal is set if output is not being piped
 } else {  # piped output will print read on one line.
 	print "Legend:  line 1: aligned seq. line 2: reference seq. line 3: insert +/delete -/mismatch x/: indicators. lines 0/4- : position in aligned sequence."
 	print " "
+        printf("Cigar: %s \n \n",cig);
 	printf(" %s \n",kStr);
 	printf("1 %s \n",read_seq);
 	printf("2 %s \n",refAd);
