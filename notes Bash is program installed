@@ -1,0 +1,24 @@
+How can I tell if a program is available from bash?
+
+https://stackoverflow.com/questions/592620/how-can-i-check-if-a-program-exists-from-a-bash-script
+
+POSIX compatible:
+
+command -v <the_command>
+Example use:
+
+if ! command -v COMMAND &> /dev/null
+then
+    echo "COMMAND could not be found"
+    exit
+fi
+For Bash specific environments:
+
+hash <the_command> # For regular commands. Or...
+type <the_command> # To check built-ins and keywords
+
+Explanation
+Avoid which. Not only is it an external process you're launching for doing very little 
+(meaning builtins like hash, type or command are way cheaper), you can also rely on the 
+builtins to actually do what you want, while the effects of external commands can easily 
+vary from system to system.
