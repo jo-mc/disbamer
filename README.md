@@ -4,7 +4,7 @@ disbamer - using bash and awk scripts to show the alignment of a read to referen
 
 #### Display an aligned read sequence in a bam file alongside its reference sequence, showing inserts, deletes and mismatches.
  
- .io built with https://bookdown.org/yihui/bookdown/github.html
+ script design: https://jo-mc.github.io/disbamer/   ....  (.io built with https://bookdown.org/yihui/bookdown/github.html)
 
 #### for best results pipe to less -S. or redirect to a file.
 
